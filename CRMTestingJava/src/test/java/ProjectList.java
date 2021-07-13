@@ -4,6 +4,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,14 +23,14 @@ public class ProjectList {
     }
 
     @BeforeEach
-    void beforeEachTest(){
+    void beforeEachTest() {
         driver.get(MAIN_PAGE_URL);
         driver.manage().addCookie(cookie);
         driver.manage().window().maximize();
     }
 
     @AfterEach
-    void afterEachTest(){
+    void afterEachTest() {
         driver.quit();
     }
 
@@ -87,7 +88,26 @@ public class ProjectList {
         driver.findElement(By.xpath(".//button[@class='btn btn-success action-button']")).click();
 
         waitSevenSeconds.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//h1[@class='oro-subtitle']")));
-        Assertions.assertEquals(driver.getCurrentUrl(),PROJECT_PAGE_URL);
+        Assertions.assertEquals(driver.getCurrentUrl(), PROJECT_PAGE_URL);
 
     }
+
+    @Test
+    @DisplayName("Выбор проекта с заданным именем")
+    public void findProject() {
+        driver.findElement(By.xpath(".//span[@class='title' and text()='Проекты']")).click();
+
+        waitSevenSeconds.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//span[@class='title' and text()='Мои проекты']")));
+        driver.findElement(By.xpath(".//span[@class='title' and text()='Мои проекты']")).click();
+
+        waitSevenSeconds.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//div[@class='btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle filter-default-value' and contains(text(), 'Наименование')]")));
+        driver.findElement(By.xpath(".//div[@class='btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle filter-default-value' and contains(text(), 'Наименование')]")).click();
+        driver.findElement(By.xpath(".//input[@name='value']")).sendKeys("MyProject");
+        driver.findElement(By.xpath(".//button[@type='button' and text()='Обновить']")).click();
+
+        waitSevenSeconds.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//td[@class='string-cell grid-cell grid-body-cell grid-body-cell-name' and text()='MyProject']")));
+        Assertions.assertTrue(driver.findElement(By.xpath(".//td[@class='string-cell grid-cell grid-body-cell grid-body-cell-name' and text()='MyProject']")).isDisplayed());
+    }
+
+
 }
