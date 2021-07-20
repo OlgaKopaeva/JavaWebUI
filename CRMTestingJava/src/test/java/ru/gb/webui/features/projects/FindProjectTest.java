@@ -1,5 +1,9 @@
 package ru.gb.webui.features.projects;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,10 +15,13 @@ import ru.gb.webui.enums.ProjectSubMenuButtons;
 import ru.gb.webui.pages.LoginPage;
 import ru.gb.webui.pages.MyProjectsPage;
 
+@Feature("Find project in list")
+@Severity(SeverityLevel.NORMAL)
 public class FindProjectTest extends BaseUITest {
 
     @Test
-    @DisplayName("Выбор проекта с заданным именем")
+    @DisplayName("Search for existing project")
+    @Description("Поиск проекта с заданным именем")
     public void findProjectPositiveTest() {
         MyProjectsPage myProjectsScreen = (MyProjectsPage) new LoginPage(driver)
                 .authoriseScenario(Configuration.STUDENT_LOGIN, Configuration.STUDENT_PASSWORD)

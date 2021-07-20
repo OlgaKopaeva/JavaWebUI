@@ -1,5 +1,6 @@
 package ru.gb.webui.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,18 +31,21 @@ public class NewContactPage extends BaseView {
         super(driver);
     }
 
+    @Step("Set last name {name}")
     public NewContactPage setLastName(String name) {
         lastName.clear();
         lastName.sendKeys(name);
         return this;
     }
 
+    @Step("Set first name {name}")
     public NewContactPage setFirstName(String name) {
         firstName.clear();
         firstName.sendKeys(name);
         return this;
     }
 
+    @Step("Set organization with name {organizationName}")
     public NewContactPage setOrganization(String organizationName) throws InterruptedException {
         organizationDropDown.click();
         Thread.sleep(5000);
@@ -51,6 +55,7 @@ public class NewContactPage extends BaseView {
         return this;
     }
 
+    @Step("Set job title {job}")
     public NewContactPage setJobTitle(String job) {
         jobTitle.clear();
         jobTitle.sendKeys(job);

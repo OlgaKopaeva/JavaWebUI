@@ -1,5 +1,6 @@
 package ru.gb.webui.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,6 +23,7 @@ public class AllProjectsPage extends BaseView {
         return new NewProjectPage(driver);
     }
 
+    @Step("Check alert text 'New project is created'")
     public AllProjectsPage checkNewProjectPopUp() {
         String message = wait7seconds.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(
                 "div[class='message']"))).getText();

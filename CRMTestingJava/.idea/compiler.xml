@@ -9,8 +9,8 @@
         <module name="CRMTestingJava" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="CRMTestingJava" target="16" />
+    <bytecodeTargetLevel target="8">
+      <module name="CRMTestingJava" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

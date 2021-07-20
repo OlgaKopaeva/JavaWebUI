@@ -1,5 +1,6 @@
 package ru.gb.webui.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -43,12 +44,14 @@ public class NewProjectPage extends BaseView {
         super(driver);
     }
 
+    @Step("Set project name {name}")
     public NewProjectPage setProjectName(String name) {
         projectName.clear();
         projectName.sendKeys(name);
         return this;
     }
 
+    @Step("Set organization with name {organizationName}")
     public NewProjectPage setOrganization(String organizationName) throws InterruptedException {
         organizationDropDown.click();
         Thread.sleep(5000);
@@ -58,36 +61,42 @@ public class NewProjectPage extends BaseView {
         return this;
     }
 
+    @Step("Set contact main with value {value}")
     public NewProjectPage selectContactMain(int value) {
         Select contactMainDropDown = new Select(contactMainDropDownSelect);
         contactMainDropDown.selectByValue(String.valueOf(value));
         return this;
     }
 
+    @Step("Set business unit with value {value}")
     public NewProjectPage selectBusinessUnit(int value) {
         Select businessUnitDropDown = new Select(businessUnitDropDownSelect);
         businessUnitDropDown.selectByValue(String.valueOf(value));
         return this;
     }
 
+    @Step("Set curator with value {value}")
     public NewProjectPage selectCurator(int value) {
         Select curatorDropDown = new Select(curatorDropDownSelect);
         curatorDropDown.selectByValue(String.valueOf(value));
         return this;
     }
 
+    @Step("Set rp with value {value}")
     public NewProjectPage selectRp(int value) {
         Select rpDropDown = new Select(rpDropDownSelect);
         rpDropDown.selectByValue(String.valueOf(value));
         return this;
     }
 
+    @Step("Set admin with value {value}")
     public NewProjectPage selectAdmin(int value) {
         Select adminDropDown = new Select(adminDropDownSelect);
         adminDropDown.selectByValue(String.valueOf(value));
         return this;
     }
 
+    @Step("Set manager with value {value}")
     public NewProjectPage selectManager(int value) {
         Select managerDropDown = new Select(managerDropDownSelect);
         managerDropDown.selectByValue(String.valueOf(value));

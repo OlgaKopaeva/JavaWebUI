@@ -1,5 +1,6 @@
 package ru.gb.webui.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,6 +17,7 @@ public class MyProjectsPage extends BaseView {
     @FindBy(xpath = ".//button[@type='button' and text()='Обновить']")
     private WebElement updateButton;
 
+    @Step("Set project name {name}")
     public MyProjectsPage setMyProjectName(String name) {
         projectNameFilter.click();
         projectNameField.clear();
