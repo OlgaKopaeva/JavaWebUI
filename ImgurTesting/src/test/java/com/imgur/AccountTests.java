@@ -1,28 +1,28 @@
 package com.imgur;
 
-import org.junit.jupiter.api.BeforeAll;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import static io.restassured.RestAssured.given;
-import java.util.HashMap;
-import java.util.Map;
+import static org.hamcrest.Matchers.is;
 
-public class AccountTests extends BaseTest{
-    static Map<String, String> headers = new HashMap<>();
-
-    @BeforeAll
-    static void setUp() {
-        headers.put("Authorization", "Bearer " + token);
-    }
+public class AccountTests extends BaseTest {
 
     @Test
-    void getAccountInfoTest() {
+    @DisplayName("Get information about account")
+    void testGetAccountInformation() {
         given()
-                .headers(headers)
+                .contentType(ContentType.JSON).accept(ContentType.JSON)
+                .auth().oauth2(token)
+                .log().all()
+                .expect()
+                .log().all()
+                .statusCode(200)
+                .body("data.id", is(Integer. parseInt(userId)))
                 .when()
-                .get("https://api.imgur.com/3/account/{username}", username)
-                .then()
-                .statusCode(200);
-    }
+                .get("https://api.imgur.com/3/account/{username}", username);
 
+    }
 
 }
