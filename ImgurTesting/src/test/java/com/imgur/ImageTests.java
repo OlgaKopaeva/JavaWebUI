@@ -1,6 +1,10 @@
 package com.imgur;
 
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.path.json.JsonPath;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
@@ -8,6 +12,7 @@ import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.oauth2;
 import static org.hamcrest.Matchers.is;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -16,6 +21,15 @@ public class ImageTests extends BaseTest {
     static String encodedFile;
     static String imageHash;
     static String deletehash;
+
+    RequestSpecification requestSpecification = new RequestSpecBuilder()
+            .setAuth(oauth2(token))
+            .build();
+
+    ResponseSpecification responseSpecification = new ResponseSpecBuilder()
+            .expectStatusCode(200)
+            .expectBody("success", is(true))
+            .build();
 
     @BeforeAll
     static void beforeAllTest() throws IOException {
@@ -29,13 +43,13 @@ public class ImageTests extends BaseTest {
     void testUploadImage() throws InterruptedException {
         JsonPath response = given()
                 .log().all()
+                .spec(requestSpecification)
                 .contentType("multipart/form-data")
                 .multiPart("image", encodedFile)
-                .headers("Authorization", "Bearer " + token)
                 .headers("type", "base64")
-                .expect()
+                .response()
+                .spec(responseSpecification)
                 .log().all()
-                .statusCode(200)
                 .when()
                 .post("https://api.imgur.com/3/image")
                 .prettyPeek()
@@ -47,7 +61,6 @@ public class ImageTests extends BaseTest {
         imageHash = response.getString("data.id");
 
         TimeUnit.SECONDS.sleep(3);
-
     }
 
     @Order(2)
@@ -55,10 +68,10 @@ public class ImageTests extends BaseTest {
     @DisplayName("Get image")
     void testGetImage() {
         given()
-                .headers("Authorization", "Bearer " + token)
                 .log().all()
-                .expect()
-                .statusCode(200)
+                .spec(requestSpecification)
+                .response()
+                .spec(responseSpecification)
                 .log().all()
                 .body("data.type", is("image/jpeg"))
                 .body("data.deletehash", is(deletehash))
@@ -71,11 +84,11 @@ public class ImageTests extends BaseTest {
     @DisplayName("Delete image")
     void testDeleteImage() throws InterruptedException {
         given()
-                .headers("Authorization", "Bearer " + token)
                 .log().all()
-                .expect()
+                .spec(requestSpecification)
+                .response()
+                .spec(responseSpecification)
                 .log().all()
-                .statusCode(200)
                 .when()
                 .delete("https://api.imgur.com/3/account/{username}/image/{deleteHash}", username, deletehash);
 
@@ -87,8 +100,8 @@ public class ImageTests extends BaseTest {
     @DisplayName("Get non-existing image")
     void testGetNonExistingImage() {
         String actually = given()
-                .headers("Authorization", "Bearer " + token)
                 .log().all()
+                .spec(requestSpecification)
                 .expect()
                 .statusCode(404)
                 .log().all()
